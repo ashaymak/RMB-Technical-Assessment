@@ -69,27 +69,20 @@ Contains unit tests for the `OrderBook` class, verifying the correct functionali
   - `testModifyOrder()`: Tests modifying an existing order in the order book.
   - `testMatchOrders()`: Tests matching a buy order with a sell order.
   - `testMultipleMatches()`: Tests matching multiple buy and sell orders.
-  - `testNoMatchOrders()`: Tests that no match occurs when buy and sell prices do not overlap.
 
 ## How to Run the Project
 
 1. **Clone the Repository**: 
     ```sh
     git clone <repository-url>
-    cd order-book-matching-engine
+    cd RMB-Technical-Assessment
     ```
 
-2. **Open the Project in IntelliJ IDEA**:
-    - Open IntelliJ IDEA.
-    - Click on `File > Open` and select the project directory.
+2. **Add JUnit 5 Dependency**
 
-3. **Add JUnit 5 Dependency**:
-    - Go to `File > Project Structure > Modules`.
-    - Select your module and then the `Dependencies` tab.
-    - Click the `+` button and add `JUnit5` as a dependency.
+3. **Run OrderBookTest**
 
-4. **Run the Tests**:
-    - Right-click on the `OrderBookTest` class in the Project Explorer.
-    - Select `Run 'OrderBookTest'`.
+4. **Run PerformanceTest**
+
 
 

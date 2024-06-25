@@ -86,11 +86,14 @@ public class OrderBook {
     }
 
     private boolean modifyOrderInMap(int orderId, int newQuantity, NavigableMap<Double, OrderQueue> orders) {
+        // Loop through prices in order book
         for (Map.Entry<Double, OrderQueue> entry : orders.entrySet()) {
             OrderQueue queue = entry.getValue();
+            // Loop through orders in queue
             for (Order order : queue.getOrders()) {
                 if (order.getId() == orderId) {
-                    queue.modify(order, newQuantity); // Modify the order
+                    // Modify the order, and deprioritize
+                    queue.modify(order, newQuantity);
                     return true;
                 }
             }
@@ -114,21 +117,29 @@ public class OrderBook {
      * Matches buy and sell orders and updates the order book.
      */
     public void matchOrders() {
+
+        // Check that there are buy and sell orders left
         while (!buyOrders.isEmpty() && !sellOrders.isEmpty()) {
+
             double highestBuyPrice = buyOrders.firstKey();
             double lowestSellPrice = sellOrders.firstKey();
 
+            // Check if an order can be sold for asking price or higher
             if (highestBuyPrice >= lowestSellPrice) {
+                // Get the orders according their priority
                 OrderQueue buyQueue = buyOrders.get(highestBuyPrice);
                 OrderQueue sellQueue = sellOrders.get(lowestSellPrice);
 
+                // Get the first orders that were placed at the right price
                 Order buyOrder = buyQueue.poll();
                 Order sellOrder = sellQueue.poll();
 
-                int matchQuantity = Math.min(buyOrder.getQuantity(), sellOrder.getQuantity());
+                // Find the new quantity after the trade
+                final int matchQuantity = Math.min(buyOrder.getQuantity(), sellOrder.getQuantity());
                 buyOrder.setQuantity(buyOrder.getQuantity() - matchQuantity);
                 sellOrder.setQuantity(sellOrder.getQuantity() - matchQuantity);
 
+                // Add orders back to queue if they still have a quantity
                 if (buyOrder.getQuantity() > 0) {
                     buyQueue.add(buyOrder);
                 }
@@ -136,6 +147,7 @@ public class OrderBook {
                     sellQueue.add(sellOrder);
                 }
 
+                // Remove the queues from the order book if they are empty
                 if (buyQueue.isEmpty()) {
                     buyOrders.remove(highestBuyPrice);
                 }
@@ -143,7 +155,8 @@ public class OrderBook {
                     sellOrders.remove(lowestSellPrice);
                 }
             } else {
-                break; // No more matches possible
+                // No more matches possible
+                break;
             }
         }
     }
